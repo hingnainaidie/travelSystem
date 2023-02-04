@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqu.travelsystem.dao.TicketDao">
+
+    <resultMap id="BaseResultMap" type="com.cqu.travelsystem.entity.Ticket">
+        <!--@Table ticket-->
+        <result property="ticketId" column="ticket_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="scenicId" column="scenic_id" jdbcType="INTEGER"/>
+        <result property="ticketBuyTime" column="ticket_buy_time" jdbcType="TIMESTAMP"/>
+        <result property="ticketUsetimeYear" column="ticket_usetime_year" jdbcType="INTEGER"/>
+        <result property="ticketUsetimeMonth" column="ticket_usetime_month" jdbcType="INTEGER"/>
+        <result property="ticketUsetimeDay" column="ticket_usetime_day" jdbcType="INTEGER"/>
+        <result property="ticketPrice" column="ticket_price" jdbcType="INTEGER"/>
+        <result property="ticketStatus" column="ticket_status" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          ticket_id, user_id, scenic_id, ticket_buy_time, ticket_usetime_year, ticket_usetime_month, ticket_usetime_day, ticket_price, ticket_status
+        from ticket
+        where ticket_id = #{ticketId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          ticket_id, user_id, scenic_id, ticket_buy_time, ticket_usetime_year, ticket_usetime_month, ticket_usetime_day, ticket_price, ticket_status
+        from ticket
+        <where>
+            <if test="ticketId != null">
+                and ticket_id = #{ticketId}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="scenicId != null">
+                and scenic_id = #{scenicId}
+            </if>
+            <if test="ticketBuyTime != null">
+                and ticket_buy_time = #{ticketBuyTime}
+            </if>
+            <if test="ticketUsetimeYear != null">
+                and ticket_usetime_year = #{ticketUsetimeYear}
+            </if>
+            <if test="ticketUsetimeMonth != null">
+                and ticket_usetime_month = #{ticketUsetimeMonth}
+            </if>
+            <if test="ticketUsetimeDay != null">
+                and ticket_usetime_day = #{ticketUsetimeDay}
+            </if>
+            <if test="ticketPrice != null">
+                and ticket_price = #{ticketPrice}
+            </if>
+            <if test="ticketStatus != null">
+                and ticket_status = #{ticketStatus}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          ticket_id, user_id, scenic_id, ticket_buy_time, ticket_usetime_year, ticket_usetime_month, ticket_usetime_day, ticket_price, ticket_status
+        from travelmanagement.ticket
+    </select>
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from ticket
+        <where>
+            <if test="ticketId != null">
+                and ticket_id = #{ticketId}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="scenicId != null">
+                and scenic_id = #{scenicId}
+            </if>
+            <if test="ticketBuyTime != null">
+                and ticket_buy_time = #{ticketBuyTime}
+            </if>
+            <if test="ticketUsetimeYear != null">
+                and ticket_usetime_year = #{ticketUsetimeYear}
+            </if>
+            <if test="ticketUsetimeMonth != null">
+                and ticket_usetime_month = #{ticketUsetimeMonth}
+            </if>
+            <if test="ticketUsetimeDay != null">
+                and ticket_usetime_day = #{ticketUsetimeDay}
+            </if>
+            <if test="ticketPrice != null">
+                and ticket_price = #{ticketPrice}
+            </if>
+            <if test="ticketStatus != null">
+                and ticket_status = #{ticketStatus}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="ticketId" useGeneratedKeys="true">
+        insert into ticket(user_id, scenic_id, ticket_buy_time, ticket_usetime_year, ticket_usetime_month, ticket_usetime_day, ticket_price, ticket_status)
+        values (#{userId}, #{scenicId}, #{ticketBuyTime}, #{ticketUsetimeYear}, #{ticketUsetimeMonth}, #{ticketUsetimeDay}, #{ticketPrice}, #{ticketStatus})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="ticketId" useGeneratedKeys="true">
+        insert into ticket(user_id, scenic_id, ticket_buy_time, ticket_usetime_year, ticket_usetime_month, ticket_usetime_day, ticket_price, ticket_status)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.userId}, #{entity.scenicId}, #{entity.ticketBuyTime}, #{entity.ticketUsetimeYear}, #{entity.ticketUsetimeMonth}, #{entity.ticketUsetimeDay}, #{entity.ticketPrice}, #{entity.ticketStatus})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="ticketId" useGeneratedKeys="true">
+        insert into ticket(user_id, scenic_id, ticket_buy_time, ticket_usetime_year, ticket_usetime_month, ticket_usetime_day, ticket_price, ticket_status)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userId}, #{entity.scenicId}, #{entity.ticketBuyTime}, #{entity.ticketUsetimeYear}, #{entity.ticketUsetimeMonth}, #{entity.ticketUsetimeDay}, #{entity.ticketPrice}, #{entity.ticketStatus})
+        </foreach>
+        on duplicate key update
+        user_id = values(user_id),
+        scenic_id = values(scenic_id),
+        ticket_buy_time = values(ticket_buy_time),
+        ticket_usetime_year = values(ticket_usetime_year),
+        ticket_usetime_month = values(ticket_usetime_month),
+        ticket_usetime_day = values(ticket_usetime_day),
+        ticket_price = values(ticket_price),
+        ticket_status = values(ticket_status)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update ticket
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="scenicId != null">
+                scenic_id = #{scenicId},
+            </if>
+            <if test="ticketBuyTime != null">
+                ticket_buy_time = #{ticketBuyTime},
+            </if>
+            <if test="ticketUsetimeYear != null">
+                ticket_usetime_year = #{ticketUsetimeYear},
+            </if>
+            <if test="ticketUsetimeMonth != null">
+                ticket_usetime_month = #{ticketUsetimeMonth},
+            </if>
+            <if test="ticketUsetimeDay != null">
+                ticket_usetime_day = #{ticketUsetimeDay},
+            </if>
+            <if test="ticketPrice != null">
+                ticket_price = #{ticketPrice},
+            </if>
+            <if test="ticketStatus != null">
+                ticket_status = #{ticketStatus},
+            </if>
+        </set>
+        where ticket_id = #{ticketId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from ticket where ticket_id = #{ticketId}
+    </delete>
+
+    <select id="CountTicketNumByDay" resultType="java.lang.Integer">
+        select count(ticket_id) as num
+        from travelmanagement.ticket
+        where ticket_usetime_year = #{ticketUsetimeYear} and ticket_usetime_month = #{ticketUsetimeMonth} and ticket_usetime_day = #{ticketUsetimeDay} and scenic_id = #{scenicId}
+    </select>
+
+    <select id="GetAllTicketInfoByDay" resultType="com.cqu.travelsystem.Vo.TicketMoney">
+        select
+            scenic_id, ticket_usetime_year, ticket_usetime_month, ticket_usetime_day, sum(ticket_price) as money
+        from travelmanagement.ticket
+        where scenic_id = #{scenicId} and ticket_usetime_year = #{ticketUsetimeYear} and ticket_usetime_month = #{ticketUsetimeMonth}
+        GROUP BY ticket_usetime_day
+        order by ticket_usetime_day
+    </select>
+
+    <select id="GetTicketInfoByMonth" resultType="com.cqu.travelsystem.Vo.TicketMoney">
+        select
+            ticket_usetime_month, sum(ticket_price) as money
+        from travelmanagement.ticket
+        where scenic_id = #{scenicId} and ticket_usetime_year = #{ticketUsetimeYear}
+        group by ticket_usetime_month
+    </select>
+
+    <select id="GetTicketInfoFiveYear" resultType="com.cqu.travelsystem.Vo.TicketMoney">
+        select
+            ticket_usetime_year, sum(ticket_price) as money
+        from travelmanagement.ticket
+        where scenic_id = #{scenicId}
+        GROUP BY ticket_usetime_year
+        HAVING ticket_usetime_year > (#{ticketUsetimeYear} - 5)
+    </select>
+
+    <select id="searchByName" resultType="com.cqu.travelsystem.Vo.visiterVo">
+        select user.user_name, user.user_gender, user.user_phone, user.user_account, ticket.ticket_id, ticket.ticket_status, scenic.scenic_name, ticket.ticket_buy_time, ticket.ticket_usetime_year, ticket.ticket_usetime_month, ticket.ticket_usetime_day
+        from user,ticket,scenic
+        where user.user_id = ticket.user_id and ticket.scenic_id = scenic.scenic_id and user_name like concat('%', #{userName} ,'%')
+    </select>
+
+    <select id="staffsearchByName" resultType="com.cqu.travelsystem.Vo.visiterVo">
+        select user.user_name, user.user_gender, user.user_phone, user.user_account, ticket.ticket_id, ticket.ticket_status, scenic.scenic_name, ticket.ticket_buy_time, ticket.ticket_usetime_year, ticket.ticket_usetime_month, ticket.ticket_usetime_day
+        from user,ticket,scenic
+        where user.user_id = ticket.user_id and ticket.scenic_id = scenic.scenic_id and user_name like concat('%', #{userName} ,'%') and scenic.scenic_id = #{scenicId}
+    </select>
+
+    <select id="countScenicIn" resultType="com.cqu.travelsystem.Vo.InOutNum">
+        select COUNT(ticket_id) as ScenicIn
+        from ticket
+        where scenic_id = #{scenicId} and ticket_usetime_year = #{ticketUsetimeYear} and ticket_usetime_month = #{ticketUsetimeMonth} and ticket_status = 1
+        group by ticket_usetime_day
+        having  ticket_usetime_day = #{ticketUsetimeDay}
+    </select>
+
+    <select id="countScenicOut" resultType="com.cqu.travelsystem.Vo.InOutNum">
+        select COUNT(ticket_id) as ScenicOut
+        from ticket
+        where scenic_id = #{scenicId} and ticket_usetime_year = #{ticketUsetimeYear} and ticket_usetime_month = #{ticketUsetimeMonth} and ticket_status = 2
+        group by ticket_usetime_day
+        having  ticket_usetime_day = #{ticketUsetimeDay}
+    </select>
+
+    <select id="showTickets" resultType="com.cqu.travelsystem.Vo.TicketScenic">
+    select
+    ticket_id,scenic_location, scenic_name, ticket_buy_time, ticket_usetime_year, ticket_usetime_month, ticket_usetime_day, ticket_price, ticket_status
+    from travelmanagement.ticket,travelmanagement.scenic
+    where ticket.user_id=#{userId} and ticket.scenic_id=scenic.scenic_id
+    order by ticket_buy_time desc,ticket_status asc;
+    </select>
+
+    <update id="useTicket">
+        update ticket
+        <set>
+        ticket_status = 1,
+        </set>
+        where ticket_id = #{ticketId}
+    </update>
+
+
+    <update id="changeStatus">
+        update ticket
+        <set>
+            ticket_status = 2
+        </set>
+        where ticket_usetime_year = #{param1} and ticket_usetime_month = #{param2} and ticket_usetime_day = #{param3}
+    </update>
+
+</mapper>
+

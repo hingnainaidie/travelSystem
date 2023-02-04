@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqu.travelsystem.dao.ComplaintEventDao">
+
+    <resultMap id="BaseResultMap" type="com.cqu.travelsystem.entity.ComplaintEvent">
+        <!--@Table complaint_event-->
+        <result property="complaintId" column="complaint_id" jdbcType="INTEGER"/>
+        <result property="tuserId" column="Tuser_id" jdbcType="INTEGER"/>
+        <result property="suserId" column="Suser_id" jdbcType="INTEGER"/>
+        <result property="complaintDescription" column="complaint_description" jdbcType="VARCHAR"/>
+        <result property="complaintBegintime" column="complaint_begintime" jdbcType="VARCHAR"/>
+        <result property="complaintStatus" column="complaint_status" jdbcType="VARCHAR"/>
+        <result property="complaintEndtime" column="complaint_endtime" jdbcType="TIMESTAMP"/>
+        <result property="complaintResult" column="complaint_result" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          complaint_id, Tuser_id, Suser_id, complaint_description, complaint_begintime, complaint_status, complaint_endtime, complaint_result
+        from complaint_event
+        where complaint_id = #{complaintId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          complaint_id, Tuser_id, Suser_id, complaint_description, complaint_begintime, complaint_status, complaint_endtime, complaint_result
+        from complaint_event
+        <where>
+            <if test="complaintId != null">
+                and complaint_id = #{complaintId}
+            </if>
+            <if test="tuserId != null">
+                and Tuser_id = #{tuserId}
+            </if>
+            <if test="suserId != null">
+                and Suser_id = #{suserId}
+            </if>
+            <if test="complaintDescription != null and complaintDescription != ''">
+                and complaint_description = #{complaintDescription}
+            </if>
+            <if test="complaintBegintime != null and complaintBegintime != ''">
+                and complaint_begintime = #{complaintBegintime}
+            </if>
+            <if test="complaintStatus != null and complaintStatus != ''">
+                and complaint_status = #{complaintStatus}
+            </if>
+            <if test="complaintEndtime != null">
+                and complaint_endtime = #{complaintEndtime}
+            </if>
+            <if test="complaintResult != null and complaintResult != ''">
+                and complaint_result = #{complaintResult}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          complaint_id, Tuser_id, Suser_id, complaint_description, complaint_begintime, complaint_status, complaint_endtime, complaint_result
+        from travelmanagement.complaint_event
+    </select>
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from complaint_event
+        <where>
+            <if test="complaintId != null">
+                and complaint_id = #{complaintId}
+            </if>
+            <if test="tuserId != null">
+                and Tuser_id = #{tuserId}
+            </if>
+            <if test="suserId != null">
+                and Suser_id = #{suserId}
+            </if>
+            <if test="complaintDescription != null and complaintDescription != ''">
+                and complaint_description = #{complaintDescription}
+            </if>
+            <if test="complaintBegintime != null and complaintBegintime != ''">
+                and complaint_begintime = #{complaintBegintime}
+            </if>
+            <if test="complaintStatus != null and complaintStatus != ''">
+                and complaint_status = #{complaintStatus}
+            </if>
+            <if test="complaintEndtime != null">
+                and complaint_endtime = #{complaintEndtime}
+            </if>
+            <if test="complaintResult != null and complaintResult != ''">
+                and complaint_result = #{complaintResult}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="complaintId" useGeneratedKeys="true">
+        insert into complaint_event(Tuser_id, Suser_id, complaint_description, complaint_begintime, complaint_status, complaint_endtime, complaint_result)
+        values (#{tuserId}, #{suserId}, #{complaintDescription}, #{complaintBegintime}, #{complaintStatus}, #{complaintEndtime}, #{complaintResult})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="complaintId" useGeneratedKeys="true">
+        insert into complaint_event(Tuser_id, Suser_id, complaint_description, complaint_begintime, complaint_status, complaint_endtime, complaint_result)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.tuserId}, #{entity.suserId}, #{entity.complaintDescription}, #{entity.complaintBegintime}, #{entity.complaintStatus}, #{entity.complaintEndtime}, #{entity.complaintResult})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="complaintId" useGeneratedKeys="true">
+        insert into complaint_event(Tuser_id, Suser_id, complaint_description, complaint_begintime, complaint_status, complaint_endtime, complaint_result)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.tuserId}, #{entity.suserId}, #{entity.complaintDescription}, #{entity.complaintBegintime}, #{entity.complaintStatus}, #{entity.complaintEndtime}, #{entity.complaintResult})
+        </foreach>
+        on duplicate key update
+        Tuser_id = values(Tuser_id),
+        Suser_id = values(Suser_id),
+        complaint_description = values(complaint_description),
+        complaint_begintime = values(complaint_begintime),
+        complaint_status = values(complaint_status),
+        complaint_endtime = values(complaint_endtime),
+        complaint_result = values(complaint_result)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update complaint_event
+        <set>
+            <if test="tuserId != null">
+                Tuser_id = #{tuserId},
+            </if>
+            <if test="suserId != null">
+                Suser_id = #{suserId},
+            </if>
+            <if test="complaintDescription != null and complaintDescription != ''">
+                complaint_description = #{complaintDescription},
+            </if>
+            <if test="complaintBegintime != null and complaintBegintime != ''">
+                complaint_begintime = #{complaintBegintime},
+            </if>
+            <if test="complaintStatus != null and complaintStatus != ''">
+                complaint_status = #{complaintStatus},
+            </if>
+            <if test="complaintEndtime != null">
+                complaint_endtime = #{complaintEndtime},
+            </if>
+            <if test="complaintResult != null and complaintResult != ''">
+                complaint_result = #{complaintResult},
+            </if>
+        </set>
+        where complaint_id = #{complaintId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from complaint_event where complaint_id = #{complaintId}
+    </delete>
+
+    <select id="quaryAllComEvent" resultMap="BaseResultMap">
+        select complaint_id,complaint_description,complaint_status
+        from complaint_event
+        order by complaint_status asc;
+    </select>
+
+    <select id="queryComplaintById" resultMap="BaseResultMap">
+        select * from complaint_event
+        where complaint_id = #{complaintId}
+    </select>
+
+    <update id="updateComplaintById">
+        update complaint_event
+        set complaint_status = #{complaintStatus},complaint_result = #{complaintResult},complaint_endtime = #{complaintEndtime},Suser_id = #{suserId}
+        where complaint_id = #{complaintId}
+    </update>
+
+    <select id="queryTComplaintById" resultMap="BaseResultMap">
+        select complaint_id,complaint_description,complaint_status
+        from complaint_event
+        where tuser_id = #{tuserId}
+    </select>
+
+    <insert id="insertComplaint">
+        insert into complaint_event(Tuser_id, complaint_description, complaint_begintime, complaint_status)
+        values
+            (#{tuserId}, #{complaintDescription},#{complaintBegintime},#{complaintStatus})
+    </insert>
+</mapper>
+

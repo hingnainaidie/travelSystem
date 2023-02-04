@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqu.travelsystem.dao.TripInfoDao">
+
+    <resultMap id="BaseResultMap" type="com.cqu.travelsystem.entity.TripInfo">
+        <!--@Table trip_info-->
+        <result property="tripInfoId" column="trip_info_id" jdbcType="INTEGER"/>
+        <result property="suserId" column="Suser_id" jdbcType="INTEGER"/>
+        <result property="tripInfoTitle" column="trip_info_title" jdbcType="VARCHAR"/>
+        <result property="tripInfoDescription" column="trip_info_description" jdbcType="VARCHAR"/>
+        <result property="tripInfoTime" column="trip_info_time" jdbcType="TIMESTAMP"/>
+        <result property="tripInfoStatus" column="trip_info_status" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          trip_info_id, Suser_id, trip_info_title, trip_info_description, trip_info_time, trip_info_status
+        from trip_info
+        where trip_info_id = #{tripInfoId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          trip_info_id, Suser_id, trip_info_title, trip_info_description, trip_info_time, trip_info_status
+        from trip_info
+        <where>
+            <if test="tripInfoId != null">
+                and trip_info_id = #{tripInfoId}
+            </if>
+            <if test="suserId != null">
+                and Suser_id = #{suserId}
+            </if>
+            <if test="tripInfoTitle != null and tripInfoTitle != ''">
+                and trip_info_title = #{tripInfoTitle}
+            </if>
+            <if test="tripInfoDescription != null and tripInfoDescription != ''">
+                and trip_info_description = #{tripInfoDescription}
+            </if>
+            <if test="tripInfoTime != null">
+                and trip_info_time = #{tripInfoTime}
+            </if>
+            <if test="tripInfoStatus != null">
+                and trip_info_status = #{tripInfoStatus}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          trip_info_id, Suser_id, trip_info_title, trip_info_description, trip_info_time, trip_info_status
+        from travelmanagement.trip_info
+    </select>
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from trip_info
+        <where>
+            <if test="tripInfoId != null">
+                and trip_info_id = #{tripInfoId}
+            </if>
+            <if test="suserId != null">
+                and Suser_id = #{suserId}
+            </if>
+            <if test="tripInfoTitle != null and tripInfoTitle != ''">
+                and trip_info_title = #{tripInfoTitle}
+            </if>
+            <if test="tripInfoDescription != null and tripInfoDescription != ''">
+                and trip_info_description = #{tripInfoDescription}
+            </if>
+            <if test="tripInfoTime != null">
+                and trip_info_time = #{tripInfoTime}
+            </if>
+            <if test="tripInfoStatus != null">
+                and trip_info_status = #{tripInfoStatus}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="tripInfoId" useGeneratedKeys="true">
+        insert into trip_info(Suser_id, trip_info_title, trip_info_description, trip_info_time, trip_info_status)
+        values (#{suserId}, #{tripInfoTitle}, #{tripInfoDescription}, #{tripInfoTime}, #{tripInfoStatus})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="tripInfoId" useGeneratedKeys="true">
+        insert into trip_info(Suser_id, trip_info_title, trip_info_description, trip_info_time, trip_info_status)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.suserId}, #{entity.tripInfoTitle}, #{entity.tripInfoDescription}, #{entity.tripInfoTime}, #{entity.tripInfoStatus})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="tripInfoId" useGeneratedKeys="true">
+        insert into trip_info(Suser_id, trip_info_title, trip_info_description, trip_info_time, trip_info_status)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.suserId}, #{entity.tripInfoTitle}, #{entity.tripInfoDescription}, #{entity.tripInfoTime}, #{entity.tripInfoStatus})
+        </foreach>
+        on duplicate key update
+        Suser_id = values(Suser_id),
+        trip_info_title = values(trip_info_title),
+        trip_info_description = values(trip_info_description),
+        trip_info_time = values(trip_info_time),
+        trip_info_status = values(trip_info_status)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update trip_info
+        <set>
+            <if test="suserId != null">
+                Suser_id = #{suserId},
+            </if>
+            <if test="tripInfoTitle != null and tripInfoTitle != ''">
+                trip_info_title = #{tripInfoTitle},
+            </if>
+            <if test="tripInfoDescription != null and tripInfoDescription != ''">
+                trip_info_description = #{tripInfoDescription},
+            </if>
+            <if test="tripInfoTime != null">
+                trip_info_time = #{tripInfoTime},
+            </if>
+            <if test="tripInfoStatus != null">
+                trip_info_status = #{tripInfoStatus},
+            </if>
+        </set>
+        where trip_info_id = #{tripInfoId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from trip_info where trip_info_id = #{tripInfoId}
+    </delete>
+
+    <insert id="createTripInfo" keyProperty="tripInfoId" useGeneratedKeys="true">
+        insert into trip_info(Suser_id, trip_info_title, trip_info_description, trip_info_time, trip_info_status)
+        values (#{suserId}, #{tripInfoTitle}, #{tripInfoDescription}, #{tripInfoTime}, #{tripInfoStatus})
+    </insert>
+
+    <select id="showTripInfos" resultMap="BaseResultMap">
+        select * from trip_info
+        order by trip_info_time desc ;
+    </select>
+
+    <select id="checkTripInfo" resultMap="BaseResultMap">
+        select * from trip_info
+        where trip_info_id = #{tripInfoId}
+    </select>
+
+    <delete id="deleteTripInfo">
+        delete from trip_info where trip_info_id = #{tripInfoId}
+    </delete>
+
+</mapper>
+

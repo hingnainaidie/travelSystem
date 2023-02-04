@@ -1,0 +1,33 @@
+[INFO]2023-01-04 15:57:21,597 - Starting TravelSystemApplication using Java 1.8.0_331 on LAPTOP-B2G26RDR with PID 35744 (C:\Users\黄月婷\Desktop\专业综合设计\B5_旅游综合管理系统\C 构建阶段\2.项目组源代码\travelSystem1\travelSystem\target\classes started by 黄月婷 in C:\Users\黄月婷\Desktop\专业综合设计\B5_旅游综合管理系统\C 构建阶段\2.项目组源代码\travelSystem1\travelSystem)
+[INFO]2023-01-04 15:57:21,600 - No active profile set, falling back to 1 default profile: "default"
+[INFO]2023-01-04 15:57:21,757 - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+[INFO]2023-01-04 15:57:21,758 - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+[INFO]2023-01-04 15:57:27,037 - Tomcat initialized with port(s): 8081 (http)
+[INFO]2023-01-04 15:57:27,058 - Initializing ProtocolHandler ["http-nio-8081"]
+[INFO]2023-01-04 15:57:27,059 - Starting service [Tomcat]
+[INFO]2023-01-04 15:57:27,059 - Starting Servlet engine: [Apache Tomcat/9.0.63]
+[INFO]2023-01-04 15:57:27,301 - Initializing Spring embedded WebApplicationContext
+[INFO]2023-01-04 15:57:27,302 - Root WebApplicationContext: initialization completed in 5543 ms
+[INFO]2023-01-04 15:57:30,164 - LiveReload server is running on port 35729
+[INFO]2023-01-04 15:57:30,193 - Starting ProtocolHandler ["http-nio-8081"]
+[INFO]2023-01-04 15:57:30,219 - Tomcat started on port(s): 8081 (http) with context path ''
+[INFO]2023-01-04 15:57:30,265 - Started TravelSystemApplication in 10.189 seconds (JVM running for 13.181)
+[INFO]2023-01-04 15:58:05,482 - Starting TravelSystemApplication using Java 1.8.0_331 on LAPTOP-B2G26RDR with PID 32864 (C:\Users\黄月婷\Desktop\专业综合设计\B5_旅游综合管理系统\C 构建阶段\2.项目组源代码\travelSystem1\travelSystem\target\classes started by 黄月婷 in C:\Users\黄月婷\Desktop\专业综合设计\B5_旅游综合管理系统\C 构建阶段\2.项目组源代码\travelSystem1\travelSystem)
+[INFO]2023-01-04 15:58:05,484 - No active profile set, falling back to 1 default profile: "default"
+[INFO]2023-01-04 15:58:05,579 - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+[INFO]2023-01-04 15:58:05,579 - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+[INFO]2023-01-04 15:58:07,833 - Tomcat initialized with port(s): 8081 (http)
+[INFO]2023-01-04 15:58:07,845 - Initializing ProtocolHandler ["http-nio-8081"]
+[INFO]2023-01-04 15:58:07,845 - Starting service [Tomcat]
+[INFO]2023-01-04 15:58:07,845 - Starting Servlet engine: [Apache Tomcat/9.0.63]
+[INFO]2023-01-04 15:58:07,982 - Initializing Spring embedded WebApplicationContext
+[INFO]2023-01-04 15:58:07,983 - Root WebApplicationContext: initialization completed in 2403 ms
+[INFO]2023-01-04 15:58:09,776 - LiveReload server is running on port 35729
+[INFO]2023-01-04 15:58:09,801 - Starting ProtocolHandler ["http-nio-8081"]
+[INFO]2023-01-04 15:58:09,824 - Tomcat started on port(s): 8081 (http) with context path ''
+[INFO]2023-01-04 15:58:09,862 - Started TravelSystemApplication in 5.092 seconds (JVM running for 6.386)
+[INFO]2023-01-04 16:07:48,963 - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[INFO]2023-01-04 16:07:48,965 - Initializing Servlet 'dispatcherServlet'
+[INFO]2023-01-04 16:07:48,979 - Completed initialization in 14 ms
+[INFO]2023-01-04 16:07:49,215 - HikariPool-1 - Starting...
+[INFO]2023-01-04 16:07:49,488 - HikariPool-1 - Start completed.

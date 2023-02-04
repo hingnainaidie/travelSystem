@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqu.travelsystem.dao.MonitorDao">
+
+    <resultMap id="BaseResultMap" type="com.cqu.travelsystem.entity.Monitor">
+        <!--@Table monitor-->
+        <result property="monitorId" column="monitor_id" jdbcType="INTEGER"/>
+        <result property="scenicId" column="scenic_id" jdbcType="INTEGER"/>
+        <result property="monitorLocation" column="monitor_location" jdbcType="VARCHAR"/>
+        <result property="monitorTime" column="monitor_time" jdbcType="TIMESTAMP"/>
+        <result property="monitorContent" column="monitor_content" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          monitor_id, scenic_id, monitor_location, monitor_time, monitor_content
+        from monitor
+        where monitor_id = #{monitorId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          monitor_id, scenic_id, monitor_location, monitor_time, monitor_content
+        from monitor
+        <where>
+            <if test="monitorId != null">
+                and monitor_id = #{monitorId}
+            </if>
+            <if test="scenicId != null">
+                and scenic_id = #{scenicId}
+            </if>
+            <if test="monitorLocation != null and monitorLocation != ''">
+                and monitor_location = #{monitorLocation}
+            </if>
+            <if test="monitorTime != null">
+                and monitor_time = #{monitorTime}
+            </if>
+            <if test="monitorContent != null and monitorContent != ''">
+                and monitor_content = #{monitorContent}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          monitor_id, scenic_id, monitor_location, monitor_time, monitor_content
+        from travelmanagement.monitor
+    </select>
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from monitor
+        <where>
+            <if test="monitorId != null">
+                and monitor_id = #{monitorId}
+            </if>
+            <if test="scenicId != null">
+                and scenic_id = #{scenicId}
+            </if>
+            <if test="monitorLocation != null and monitorLocation != ''">
+                and monitor_location = #{monitorLocation}
+            </if>
+            <if test="monitorTime != null">
+                and monitor_time = #{monitorTime}
+            </if>
+            <if test="monitorContent != null and monitorContent != ''">
+                and monitor_content = #{monitorContent}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="monitorId" useGeneratedKeys="true">
+        insert into monitor(scenic_id, monitor_location, monitor_time, monitor_content)
+        values (#{scenicId}, #{monitorLocation}, #{monitorTime}, #{monitorContent})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="monitorId" useGeneratedKeys="true">
+        insert into monitor(scenic_id, monitor_location, monitor_time, monitor_content)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.scenicId}, #{entity.monitorLocation}, #{entity.monitorTime}, #{entity.monitorContent})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="monitorId" useGeneratedKeys="true">
+        insert into monitor(scenic_id, monitor_location, monitor_time, monitor_content)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.scenicId}, #{entity.monitorLocation}, #{entity.monitorTime}, #{entity.monitorContent})
+        </foreach>
+        on duplicate key update
+        scenic_id = values(scenic_id),
+        monitor_location = values(monitor_location),
+        monitor_time = values(monitor_time),
+        monitor_content = values(monitor_content)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update monitor
+        <set>
+            <if test="scenicId != null">
+                scenic_id = #{scenicId},
+            </if>
+            <if test="monitorLocation != null and monitorLocation != ''">
+                monitor_location = #{monitorLocation},
+            </if>
+            <if test="monitorTime != null">
+                monitor_time = #{monitorTime},
+            </if>
+            <if test="monitorContent != null and monitorContent != ''">
+                monitor_content = #{monitorContent},
+            </if>
+        </set>
+        where monitor_id = #{monitorId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from monitor where monitor_id = #{monitorId}
+    </delete>
+
+    <select id="getAllMonitorByScenic" resultMap="BaseResultMap">
+        select monitor_id, scenic_id, monitor_location, monitor_time, monitor_content
+        from monitor
+        where scenic_id = #{scenicId}
+    </select>
+
+    <select id="getMonitorByDate" resultMap="BaseResultMap">
+        select monitor_id, scenic_id, monitor_location, monitor_time, monitor_content
+        from monitor
+        where scenic_id = #{scenicId} and monitor_time = #{monitorTime}
+    </select>
+
+
+
+    <select id="getMonitorByName" resultType="com.cqu.travelsystem.Vo.MoniScenVo">
+        select monitor.monitor_id, scenic.scenic_name, monitor.monitor_location, monitor.monitor_time, monitor.monitor_content
+        from monitor,scenic
+        where scenic.scenic_name like concat('%', #{scenicName} ,'%') and scenic.scenic_id = monitor.scenic_id
+    </select>
+
+    <select id="getAllMonitorByDate" resultType="com.cqu.travelsystem.Vo.MoniScenVo">
+        select monitor.monitor_id, scenic.scenic_name, monitor.monitor_location, monitor.monitor_time, monitor.monitor_content
+        from monitor,scenic
+        where monitor.monitor_time = #{monitorTime} and scenic.scenic_id = monitor.scenic_id
+    </select>
+
+    <select id="getAllMonitor" resultType="com.cqu.travelsystem.Vo.MoniScenVo">
+        select monitor.monitor_id, scenic.scenic_name, monitor.monitor_location, monitor.monitor_time, monitor.monitor_content
+        from monitor,scenic
+        where scenic.scenic_id = monitor.scenic_id
+    </select>
+</mapper>
+

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqu.travelsystem.dao.EmergencyDao">
+
+    <resultMap id="BaseResultMap" type="com.cqu.travelsystem.entity.Emergency">
+        <!--@Table emergency-->
+        <result property="emergencyId" column="emergency_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="emergencyName" column="emergency_name" jdbcType="VARCHAR"/>
+        <result property="emergencyClassification" column="emergency_classification" jdbcType="VARCHAR"/>
+        <result property="emergencyDescription" column="emergency_description" jdbcType="VARCHAR"/>
+        <result property="emergencyTime" column="emergency_time" jdbcType="TIMESTAMP"/>
+        <result property="emergencySolution" column="emergency_solution" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+            emergency_id, user_id, emergency_name, emergency_classification, emergency_description, emergency_time, emergency_solution
+        from emergency
+        where emergency_id = #{emergencyId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+        emergency_id, user_id, emergency_name, emergency_classification, emergency_description, emergency_time, emergency_solution
+        from emergency
+        <where>
+            <if test="emergencyId != null">
+                and emergency_id = #{emergencyId}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="emergencyName != null and emergencyName != ''">
+                and emergency_name = #{emergencyName}
+            </if>
+            <if test="emergencyClassification != null and emergencyClassification != ''">
+                and emergency_classification = #{emergencyClassification}
+            </if>
+            <if test="emergencyDescription != null and emergencyDescription != ''">
+                and emergency_description = #{emergencyDescription}
+            </if>
+            <if test="emergencyTime != null">
+                and emergency_time = #{emergencyTime}
+            </if>
+            <if test="emergencySolution != null and emergencySolution != ''">
+                and emergency_solution = #{emergencySolution}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+            emergency_id, user_id, emergency_name, emergency_classification, emergency_description, emergency_time, emergency_solution
+        from travelmanagement.emergency
+    </select>
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from emergency
+        <where>
+            <if test="emergencyId != null">
+                and emergency_id = #{emergencyId}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="emergencyName != null and emergencyName != ''">
+                and emergency_name = #{emergencyName}
+            </if>
+            <if test="emergencyClassification != null and emergencyClassification != ''">
+                and emergency_classification = #{emergencyClassification}
+            </if>
+            <if test="emergencyDescription != null and emergencyDescription != ''">
+                and emergency_description = #{emergencyDescription}
+            </if>
+            <if test="emergencyTime != null">
+                and emergency_time = #{emergencyTime}
+            </if>
+            <if test="emergencySolution != null and emergencySolution != ''">
+                and emergency_solution = #{emergencySolution}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="emergencyId" useGeneratedKeys="true">
+        insert into emergency(user_id, emergency_name, emergency_classification, emergency_description, emergency_time, emergency_solution)
+        values (#{userId}, #{emergencyName}, #{emergencyClassification}, #{emergencyDescription}, #{emergencyTime}, #{emergencySolution})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="emergencyId" useGeneratedKeys="true">
+        insert into emergency(user_id, emergency_name, emergency_classification, emergency_description, emergency_time, emergency_solution)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userId}, #{entity.emergencyName}, #{entity.emergencyClassification}, #{entity.emergencyDescription}, #{entity.emergencyTime}, #{entity.emergencySolution})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="emergencyId" useGeneratedKeys="true">
+        insert into emergency(user_id, emergency_name, emergency_classification, emergency_description, emergency_time, emergency_solution)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userId}, #{entity.emergencyName}, #{entity.emergencyClassification}, #{entity.emergencyDescription}, #{entity.emergencyTime}, #{entity.emergencySolution})
+        </foreach>
+        on duplicate key update
+        user_id = values(user_id),
+        emergency_name = values(emergency_name),
+        emergency_classification = values(emergency_classification),
+        emergency_description = values(emergency_description),
+        emergency_time = values(emergency_time),
+        emergency_solution = values(emergency_solution)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update emergency
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="emergencyName != null and emergencyName != ''">
+                emergency_name = #{emergencyName},
+            </if>
+            <if test="emergencyClassification != null and emergencyClassification != ''">
+                emergency_classification = #{emergencyClassification},
+            </if>
+            <if test="emergencyDescription != null and emergencyDescription != ''">
+                emergency_description = #{emergencyDescription},
+            </if>
+            <if test="emergencyTime != null">
+                emergency_time = #{emergencyTime},
+            </if>
+            <if test="emergencySolution != null and emergencySolution != ''">
+                emergency_solution = #{emergencySolution},
+            </if>
+        </set>
+        where emergency_id = #{emergencyId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from emergency where emergency_id = #{emergencyId}
+    </delete>
+
+    <!--通过类别查找预案列表-->
+    <select id="showEmergesByType" resultMap="BaseResultMap">
+        select
+            emergency_id, user_id, emergency_name, emergency_classification, emergency_description, emergency_time, emergency_solution
+        from travelmanagement.emergency
+        where emergency_classification = #{emergencyClassification}
+    </select>
+
+    <!--    查看所有预案-->
+    <select id="showEmerges" resultMap="BaseResultMap">
+        select emergency_id,emergency_time,emergency_name,emergency_classification from emergency
+        order by emergency_time desc ;
+    </select>
+
+    <!--查看单条记录详情-->
+    <select id="emergeDetail" resultMap="BaseResultMap">
+        select
+            emergency_name, emergency_classification, emergency_description, emergency_time, emergency_solution
+        from emergency
+        where emergency_id = #{emergencyId}
+    </select>
+
+    <!--    删除单条预案-->
+    <delete id="deleteEmerge" >
+        delete from emergency where emergency_id = #{emergencyId}
+    </delete>
+
+    <!--    新增应急预案-->
+    <insert id="addEmerge" useGeneratedKeys="true">
+        insert into emergency(user_id, emergency_name, emergency_classification, emergency_description, emergency_time, emergency_solution)
+        values (#{userId}, #{emergencyName}, #{emergencyClassification}, #{emergencyDescription}, #{emergencyTime}, #{emergencySolution})
+    </insert>
+
+    <!--    修改紧急预案-->
+    <update id="editEmerge">
+        update emergency
+        <set>
+            <if test="userId != null">
+                user_id=#{userId},
+            </if>
+            <if test="emergencyName != null">
+                emergency_name=#{emergencyName},
+            </if>
+            <if test="emergencyClassification != null">
+                emergency_classification=#{emergencyClassification},
+            </if>
+            <if test="emergencyDescription != null">
+                emergency_description=#{emergencyDescription},
+            </if>
+            <if test="emergencyTime != null">
+                emergency_time=#{emergencyTime},
+            </if>
+            <if test="emergencySolution != null">
+                emergency_solution=#{emergencySolution},
+            </if>
+        </set>
+        where emergency_id=#{emergencyId}
+    </update>
+
+</mapper>
+

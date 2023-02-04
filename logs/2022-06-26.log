@@ -1,0 +1,21 @@
+[INFO]2022-06-26 23:19:23,596 - Starting TravelSystemApplication using Java 1.8.0_331 on LAPTOP-B2G26RDR with PID 16528 (C:\Users\黄月婷\Desktop\计科实习\travelSystem\target\classes started by 黄月婷 in C:\Users\黄月婷\Desktop\计科实习\travelSystem)
+[INFO]2022-06-26 23:19:23,598 - No active profile set, falling back to 1 default profile: "default"
+[INFO]2022-06-26 23:19:23,806 - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+[INFO]2022-06-26 23:19:23,806 - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+[INFO]2022-06-26 23:19:27,848 - Tomcat initialized with port(s): 8081 (http)
+[INFO]2022-06-26 23:19:27,864 - Initializing ProtocolHandler ["http-nio-8081"]
+[INFO]2022-06-26 23:19:27,865 - Starting service [Tomcat]
+[INFO]2022-06-26 23:19:27,865 - Starting Servlet engine: [Apache Tomcat/9.0.63]
+[INFO]2022-06-26 23:19:31,281 - Initializing Spring embedded WebApplicationContext
+[INFO]2022-06-26 23:19:31,282 - Root WebApplicationContext: initialization completed in 7475 ms
+[INFO]2022-06-26 23:19:33,573 - LiveReload server is running on port 35729
+[INFO]2022-06-26 23:19:33,617 - Starting ProtocolHandler ["http-nio-8081"]
+[INFO]2022-06-26 23:19:33,656 - Tomcat started on port(s): 8081 (http) with context path ''
+[INFO]2022-06-26 23:19:33,718 - Started TravelSystemApplication in 12.077 seconds (JVM running for 25.982)
+[INFO]2022-06-26 23:19:50,864 - Initializing Spring DispatcherServlet 'dispatcherServlet'
+[INFO]2022-06-26 23:19:50,865 - Initializing Servlet 'dispatcherServlet'
+[INFO]2022-06-26 23:19:50,867 - Completed initialization in 2 ms
+[INFO]2022-06-26 23:19:51,305 - HikariPool-1 - Starting...
+[INFO]2022-06-26 23:19:51,604 - HikariPool-1 - Start completed.
+[INFO]2022-06-26 23:36:55,971 - HikariPool-1 - Shutdown initiated...
+[INFO]2022-06-26 23:36:56,026 - HikariPool-1 - Shutdown completed.

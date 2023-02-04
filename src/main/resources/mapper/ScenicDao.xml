@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqu.travelsystem.dao.ScenicDao">
+
+    <resultMap id="BaseResultMap" type="com.cqu.travelsystem.entity.Scenic">
+        <!--@Table scenic-->
+        <result property="scenicId" column="scenic_id" jdbcType="INTEGER"/>
+        <result property="scenicName" column="scenic_name" jdbcType="VARCHAR"/>
+        <result property="scenicLocation" column="scenic_location" jdbcType="VARCHAR"/>
+        <result property="scenicProfile" column="scenic_profile" jdbcType="VARCHAR"/>
+        <result property="scenicCapacity" column="scenic_capacity" jdbcType="INTEGER"/>
+        <result property="scenicCurrentNumber" column="scenic_current_number" jdbcType="INTEGER"/>
+        <result property="scenicPrice" column="scenic_price" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          scenic_id, scenic_name, scenic_location, scenic_profile, scenic_capacity, scenic_current_number, scenic_price
+        from scenic
+        where scenic_id = #{scenicId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          scenic_id, scenic_name, scenic_location, scenic_profile, scenic_capacity, scenic_current_number, scenic_price
+        from scenic
+        <where>
+            <if test="scenicId != null">
+                and scenic_id = #{scenicId}
+            </if>
+            <if test="scenicName != null and scenicName != ''">
+                and scenic_name = #{scenicName}
+            </if>
+            <if test="scenicLocation != null and scenicLocation != ''">
+                and scenic_location = #{scenicLocation}
+            </if>
+            <if test="scenicProfile != null and scenicProfile != ''">
+                and scenic_profile = #{scenicProfile}
+            </if>
+            <if test="scenicCapacity != null">
+                and scenic_capacity = #{scenicCapacity}
+            </if>
+            <if test="scenicCurrentNumber != null">
+                and scenic_current_number = #{scenicCurrentNumber}
+            </if>
+            <if test="scenicPrice != null">
+                and scenic_price = #{scenicPrice}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          scenic_id, scenic_name, scenic_location, scenic_profile, scenic_capacity, scenic_current_number, scenic_price
+        from travelmanagement.scenic
+    </select>
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from scenic
+        <where>
+            <if test="scenicId != null">
+                and scenic_id = #{scenicId}
+            </if>
+            <if test="scenicName != null and scenicName != ''">
+                and scenic_name = #{scenicName}
+            </if>
+            <if test="scenicLocation != null and scenicLocation != ''">
+                and scenic_location = #{scenicLocation}
+            </if>
+            <if test="scenicProfile != null and scenicProfile != ''">
+                and scenic_profile = #{scenicProfile}
+            </if>
+            <if test="scenicCapacity != null">
+                and scenic_capacity = #{scenicCapacity}
+            </if>
+            <if test="scenicCurrentNumber != null">
+                and scenic_current_number = #{scenicCurrentNumber}
+            </if>
+            <if test="scenicPrice != null">
+                and scenic_price = #{scenicPrice}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="scenicId" useGeneratedKeys="true">
+        insert into scenic(scenic_name, scenic_location, scenic_profile, scenic_capacity, scenic_current_number, scenic_price)
+        values (#{scenicName}, #{scenicLocation}, #{scenicProfile}, #{scenicCapacity}, #{scenicCurrentNumber}, #{scenicPrice})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="scenicId" useGeneratedKeys="true">
+        insert into scenic(scenic_name, scenic_location, scenic_profile, scenic_capacity, scenic_current_number, scenic_price)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.scenicName}, #{entity.scenicLocation}, #{entity.scenicProfile}, #{entity.scenicCapacity}, #{entity.scenicCurrentNumber}, #{entity.scenicPrice})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="scenicId" useGeneratedKeys="true">
+        insert into scenic(scenic_name, scenic_location, scenic_profile, scenic_capacity, scenic_current_number, scenic_price)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.scenicName}, #{entity.scenicLocation}, #{entity.scenicProfile}, #{entity.scenicCapacity}, #{entity.scenicCurrentNumber}, #{entity.scenicPrice})
+        </foreach>
+        on duplicate key update
+        scenic_name = values(scenic_name),
+        scenic_location = values(scenic_location),
+        scenic_profile = values(scenic_profile),
+        scenic_capacity = values(scenic_capacity),
+        scenic_current_number = values(scenic_current_number),
+        scenic_price = values(scenic_price)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update scenic
+        <set>
+            <if test="scenicName != null and scenicName != ''">
+                scenic_name = #{scenicName},
+            </if>
+            <if test="scenicLocation != null and scenicLocation != ''">
+                scenic_location = #{scenicLocation},
+            </if>
+            <if test="scenicProfile != null and scenicProfile != ''">
+                scenic_profile = #{scenicProfile},
+            </if>
+            <if test="scenicCapacity != null">
+                scenic_capacity = #{scenicCapacity},
+            </if>
+            <if test="scenicCurrentNumber != null">
+                scenic_current_number = #{scenicCurrentNumber},
+            </if>
+            <if test="scenicPrice != null">
+                scenic_price = #{scenicPrice},
+            </if>
+        </set>
+        where scenic_id = #{scenicId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from scenic where scenic_id = #{scenicId}
+    </delete>
+
+    <!--返回景区基本信息-->
+    <select id="queryAllScenic" resultMap="BaseResultMap">
+        select
+            scenic_id,scenic_name, scenic_location, scenic_profile, scenic_capacity, scenic_current_number, scenic_price
+        from travelmanagement.scenic
+        where scenic_id > 1
+    </select>
+
+    <select id="queryByName" resultMap="BaseResultMap" >
+        select scenic_id,scenic_name, scenic_location, scenic_profile, scenic_capacity, scenic_current_number, scenic_price
+        from travelmanagement.scenic
+        where scenic_name = #{scenicName}
+    </select>
+
+    <select id="FindscenicIdByName" resultMap="BaseResultMap">
+        select scenic_id
+        from scenic
+        where scenic_name = #{scenicName}
+    </select>
+</mapper>
+

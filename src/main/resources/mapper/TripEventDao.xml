@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqu.travelsystem.dao.TripEventDao">
+
+    <resultMap id="BaseResultMap" type="com.cqu.travelsystem.entity.TripEvent">
+        <!--@Table trip_event-->
+        <result property="tripEventId" column="trip_event_id" jdbcType="INTEGER"/>
+        <result property="emergencyId" column="emergency_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="tripEventTitle" column="trip_event_title" jdbcType="VARCHAR"/>
+        <result property="tripEventDescription" column="trip_event_description" jdbcType="VARCHAR"/>
+        <result property="tripEventClassification" column="trip_event_classification" jdbcType="VARCHAR"/>
+        <result property="tripEventLocation" column="trip_event_location" jdbcType="VARCHAR"/>
+        <result property="tripEventStatus" column="trip_event_status" jdbcType="INTEGER"/>
+        <result property="tripEventTime" column="trip_event_time" jdbcType="TIMESTAMP"/>
+        <result property="tripEventInfo" column="trip_event_info" jdbcType="VARCHAR"/>
+        <result property="staffWarningInformation" column="staff_warning_information" jdbcType="VARCHAR"/>
+        <result property="guidanceInstructionInfo" column="guidance_instruction_info" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+            trip_event_id, emergency_id, user_id, trip_event_title, trip_event_description, trip_event_classification, trip_event_location, trip_event_status, trip_event_time, trip_event_info, staff_warning_information, guidance_instruction_info
+        from trip_event
+        where trip_event_id = #{tripEventId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+        trip_event_id, emergency_id, user_id, trip_event_title, trip_event_description, trip_event_classification, trip_event_location, trip_event_status, trip_event_time, trip_event_info, staff_warning_information, guidance_instruction_info
+        from trip_event
+        <where>
+            <if test="tripEventId != null">
+                and trip_event_id = #{tripEventId}
+            </if>
+            <if test="emergencyId != null">
+                and emergency_id = #{emergencyId}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="tripEventTitle != null and tripEventTitle != ''">
+                and trip_event_title = #{tripEventTitle}
+            </if>
+            <if test="tripEventDescription != null and tripEventDescription != ''">
+                and trip_event_description = #{tripEventDescription}
+            </if>
+            <if test="tripEventClassification != null and tripEventClassification != ''">
+                and trip_event_classification = #{tripEventClassification}
+            </if>
+            <if test="tripEventLocation != null and tripEventLocation != ''">
+                and trip_event_location = #{tripEventLocation}
+            </if>
+            <if test="tripEventStatus != null">
+                and trip_event_status = #{tripEventStatus}
+            </if>
+            <if test="tripEventTime != null">
+                and trip_event_time = #{tripEventTime}
+            </if>
+            <if test="tripEventInfo != null and tripEventInfo != ''">
+                and trip_event_info = #{tripEventInfo}
+            </if>
+            <if test="staffWarningInformation != null and staffWarningInformation != ''">
+                and staff_warning_information = #{staffWarningInformation}
+            </if>
+            <if test="guidanceInstructionInfo != null and guidanceInstructionInfo != ''">
+                and guidance_instruction_info = #{guidanceInstructionInfo}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+            trip_event_id, emergency_id, user_id, trip_event_title, trip_event_description, trip_event_classification, trip_event_location, trip_event_status, trip_event_time, trip_event_info, staff_warning_information, guidance_instruction_info
+        from travelmanagement.trip_event
+    </select>
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from trip_event
+        <where>
+            <if test="tripEventId != null">
+                and trip_event_id = #{tripEventId}
+            </if>
+            <if test="emergencyId != null">
+                and emergency_id = #{emergencyId}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="tripEventTitle != null and tripEventTitle != ''">
+                and trip_event_title = #{tripEventTitle}
+            </if>
+            <if test="tripEventDescription != null and tripEventDescription != ''">
+                and trip_event_description = #{tripEventDescription}
+            </if>
+            <if test="tripEventClassification != null and tripEventClassification != ''">
+                and trip_event_classification = #{tripEventClassification}
+            </if>
+            <if test="tripEventLocation != null and tripEventLocation != ''">
+                and trip_event_location = #{tripEventLocation}
+            </if>
+            <if test="tripEventStatus != null">
+                and trip_event_status = #{tripEventStatus}
+            </if>
+            <if test="tripEventTime != null">
+                and trip_event_time = #{tripEventTime}
+            </if>
+            <if test="tripEventInfo != null and tripEventInfo != ''">
+                and trip_event_info = #{tripEventInfo}
+            </if>
+            <if test="staffWarningInformation != null and staffWarningInformation != ''">
+                and staff_warning_information = #{staffWarningInformation}
+            </if>
+            <if test="guidanceInstructionInfo != null and guidanceInstructionInfo != ''">
+                and guidance_instruction_info = #{guidanceInstructionInfo}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="tripEventId" useGeneratedKeys="true">
+        insert into trip_event(emergency_id, user_id, trip_event_title, trip_event_description, trip_event_classification, trip_event_location, trip_event_status, trip_event_time, trip_event_info, staff_warning_information, guidance_instruction_info)
+        values (#{emergencyId}, #{userId}, #{tripEventTitle}, #{tripEventDescription}, #{tripEventClassification}, #{tripEventLocation}, #{tripEventStatus}, #{tripEventTime}, #{tripEventInfo}, #{staffWarningInformation}, #{guidanceInstructionInfo})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="tripEventId" useGeneratedKeys="true">
+        insert into trip_event(emergency_id, user_id, trip_event_title, trip_event_description, trip_event_classification, trip_event_location, trip_event_status, trip_event_time, trip_event_info, staff_warning_information, guidance_instruction_info)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.emergencyId}, #{entity.userId}, #{entity.tripEventTitle}, #{entity.tripEventDescription}, #{entity.tripEventClassification}, #{entity.tripEventLocation}, #{entity.tripEventStatus}, #{entity.tripEventTime}, #{entity.tripEventInfo}, #{entity.staffWarningInformation}, #{entity.guidanceInstructionInfo})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="tripEventId" useGeneratedKeys="true">
+        insert into trip_event(emergency_id, user_id, trip_event_title, trip_event_description, trip_event_classification, trip_event_location, trip_event_status, trip_event_time, trip_event_info, staff_warning_information, guidance_instruction_info)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.emergencyId}, #{entity.userId}, #{entity.tripEventTitle}, #{entity.tripEventDescription}, #{entity.tripEventClassification}, #{entity.tripEventLocation}, #{entity.tripEventStatus}, #{entity.tripEventTime}, #{entity.tripEventInfo}, #{entity.staffWarningInformation}, #{entity.guidanceInstructionInfo})
+        </foreach>
+        on duplicate key update
+        emergency_id = values(emergency_id),
+        user_id = values(user_id),
+        trip_event_title = values(trip_event_title),
+        trip_event_description = values(trip_event_description),
+        trip_event_classification = values(trip_event_classification),
+        trip_event_location = values(trip_event_location),
+        trip_event_status = values(trip_event_status),
+        trip_event_time = values(trip_event_time),
+        trip_event_info = values(trip_event_info),
+        staff_warning_information = values(staff_warning_information),
+        guidance_instruction_info = values(guidance_instruction_info)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update trip_event
+        <set>
+            <if test="emergencyId != null">
+                emergency_id = #{emergencyId},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="tripEventTitle != null and tripEventTitle != ''">
+                trip_event_title = #{tripEventTitle},
+            </if>
+            <if test="tripEventDescription != null and tripEventDescription != ''">
+                trip_event_description = #{tripEventDescription},
+            </if>
+            <if test="tripEventClassification != null and tripEventClassification != ''">
+                trip_event_classification = #{tripEventClassification},
+            </if>
+            <if test="tripEventLocation != null and tripEventLocation != ''">
+                trip_event_location = #{tripEventLocation},
+            </if>
+            <if test="tripEventStatus != null">
+                trip_event_status = #{tripEventStatus},
+            </if>
+            <if test="tripEventTime != null">
+                trip_event_time = #{tripEventTime},
+            </if>
+            <if test="tripEventInfo != null and tripEventInfo != ''">
+                trip_event_info = #{tripEventInfo},
+            </if>
+            <if test="staffWarningInformation != null and staffWarningInformation != ''">
+                staff_warning_information = #{staffWarningInformation},
+            </if>
+            <if test="guidanceInstructionInfo != null and guidanceInstructionInfo != ''">
+                guidance_instruction_info = #{guidanceInstructionInfo},
+            </if>
+        </set>
+        where trip_event_id = #{tripEventId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from trip_event where trip_event_id = #{tripEventId}
+    </delete>
+
+    <select id="getUnTEs" resultMap="BaseResultMap">
+        select
+            trip_event_id, emergency_id, user_id, trip_event_title, trip_event_description, trip_event_classification, trip_event_location, trip_event_status, trip_event_time, trip_event_info, staff_warning_information, guidance_instruction_info
+        from travelmanagement.trip_event
+        where trip_event_status=0
+    </select>
+
+    <!--    查看所有预警消息列表-->
+    <select id="getEmergency" resultMap="BaseResultMap">
+        select trip_event_title,trip_event_time,staff_warning_information from trip_event where trip_event_status=2 order by trip_event_time desc;
+    </select>
+
+    <!--    查看历史已处理旅游事件-->
+    <select id="getChTEs" resultMap="BaseResultMap">
+        select trip_event_id,trip_event_title,trip_event_time,trip_event_classification from trip_event where trip_event_status=2 order by trip_event_time desc;
+    </select>
+
+    <!--    历史处理旅游事件详情查看-->
+    <select id="getDetailChecked" resultType="com.cqu.travelsystem.Vo.TripEventVo">
+        select trip_event.trip_event_time tripEventTime,trip_event.trip_event_title tripEventTitle,trip_event.trip_event_location tripEventLocation,
+               trip_event.trip_event_classification tripEventClassification,user.user_name userName,
+               trip_event.trip_event_description tripEventDescription,trip_event.staff_warning_information staffWarningInformation,
+               trip_event.guidance_instruction_info guidanceInstructionInfo
+        from trip_event,user where trip_event_id=#{tripEventId} and trip_event.user_id=user.user_id
+    </select>
+
+    <!--    删除单条已处理旅游事件-->
+    <delete id="deleteTripEvent">
+        delete from trip_event where trip_event_id = #{tripEventId}
+    </delete>
+    <update id="saveEmergency">
+        update trip_event
+        <set>
+            <if test="emergencyId != null">
+                emergency_id = #{emergencyId},
+            </if>
+            <if test="staffWarningInformation != null and staffWarningInformation != ''">
+                staff_warning_information = #{staffWarningInformation},
+            </if>
+            <if test="guidanceInstructionInfo != null and guidanceInstructionInfo != ''">
+                guidance_instruction_info = #{guidanceInstructionInfo},
+            </if>
+            trip_event_status = 2,
+        </set>
+        where trip_event_id = #{tripEventId}
+    </update>
+
+    <insert id="changeCaseToTripEvent">
+        insert into trip_event(user_id, trip_event_title, trip_event_description, trip_event_classification, trip_event_location, trip_event_status, trip_event_time, trip_event_info)
+        values
+            (#{userId},#{tripEventTitle},#{tripEventDescription},#{tripEventClassification},#{tripEventLocation},#{tripEventStatus},#{tripEventTime},#{tripEventInfo})
+    </insert>
+
+    <select id="queryEmergencyByuserId" resultMap="BaseResultMap">
+        select trip_event_id,staff_warning_information
+        from trip_event
+        where user_id = #{userId} and trip_event_status = #{tripEventStatus}
+    </select>
+
+    <insert id="createTripEvent" keyProperty="tripEventId" useGeneratedKeys="true">
+        insert into trip_event(emergency_id, user_id, trip_event_title, trip_event_description, trip_event_classification, trip_event_location, trip_event_status, trip_event_time, trip_event_info, staff_warning_information, guidance_instruction_info)
+        values(#{emergencyId},#{userId},#{tripEventTitle},#{tripEventDescription},#{tripEventClassification},#{tripEventLocation},#{tripEventStatus},#{tripEventTime},#{tripEventInfo},#{staffWarningInformation},#{guidanceInstructionInfo})
+    </insert>
+
+    <select id="showTripEvent" resultMap="BaseResultMap">
+        select * from trip_event
+        order by trip_event_status asc,trip_event_time desc ;
+    </select>
+
+    <select id="checkTripEvent" resultMap="BaseResultMap">
+        select * from trip_event
+        where trip_event_id = #{tripEventId}
+    </select>
+</mapper>
+

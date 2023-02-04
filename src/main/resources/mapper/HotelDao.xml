@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqu.travelsystem.dao.HotelDao">
+
+    <resultMap id="BaseResultMap" type="com.cqu.travelsystem.entity.Hotel">
+        <!--@Table hotel-->
+        <result property="hotelId" column="hotel_id" jdbcType="INTEGER"/>
+        <result property="hotelMaxCapacity" column="hotel_max_capacity" jdbcType="INTEGER"/>
+        <result property="hotelRemainingCapacity" column="hotel_remaining_capacity" jdbcType="INTEGER"/>
+        <result property="hotelName" column="hotel_name" jdbcType="VARCHAR"/>
+        <result property="hotelLocation" column="hotel_location" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          hotel_id, hotel_max_capacity, hotel_remaining_capacity, hotel_name, hotel_location
+        from hotel
+        where hotel_id = #{hotelId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          hotel_id, hotel_max_capacity, hotel_remaining_capacity, hotel_name, hotel_location
+        from hotel
+        <where>
+            <if test="hotelId != null">
+                and hotel_id = #{hotelId}
+            </if>
+            <if test="hotelMaxCapacity != null">
+                and hotel_max_capacity = #{hotelMaxCapacity}
+            </if>
+            <if test="hotelRemainingCapacity != null">
+                and hotel_remaining_capacity = #{hotelRemainingCapacity}
+            </if>
+            <if test="hotelName != null and hotelName != ''">
+                and hotel_name = #{hotelName}
+            </if>
+            <if test="hotelLocation != null and hotelLocation != ''">
+                and hotel_location = #{hotelLocation}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          hotel_id, hotel_max_capacity, hotel_remaining_capacity, hotel_name, hotel_location
+        from travelmanagement.hotel
+    </select>
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from hotel
+        <where>
+            <if test="hotelId != null">
+                and hotel_id = #{hotelId}
+            </if>
+            <if test="hotelMaxCapacity != null">
+                and hotel_max_capacity = #{hotelMaxCapacity}
+            </if>
+            <if test="hotelRemainingCapacity != null">
+                and hotel_remaining_capacity = #{hotelRemainingCapacity}
+            </if>
+            <if test="hotelName != null and hotelName != ''">
+                and hotel_name = #{hotelName}
+            </if>
+            <if test="hotelLocation != null and hotelLocation != ''">
+                and hotel_location = #{hotelLocation}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="hotelId" useGeneratedKeys="true">
+        insert into hotel(hotel_max_capacity, hotel_remaining_capacity, hotel_name, hotel_location)
+        values (#{hotelMaxCapacity}, #{hotelRemainingCapacity}, #{hotelName}, #{hotelLocation})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="hotelId" useGeneratedKeys="true">
+        insert into hotel(hotel_max_capacity, hotel_remaining_capacity, hotel_name, hotel_location)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.hotelMaxCapacity}, #{entity.hotelRemainingCapacity}, #{entity.hotelName}, #{entity.hotelLocation})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="hotelId" useGeneratedKeys="true">
+        insert into hotel(hotel_max_capacity, hotel_remaining_capacity, hotel_name, hotel_location)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.hotelMaxCapacity}, #{entity.hotelRemainingCapacity}, #{entity.hotelName}, #{entity.hotelLocation})
+        </foreach>
+        on duplicate key update
+        hotel_max_capacity = values(hotel_max_capacity),
+        hotel_remaining_capacity = values(hotel_remaining_capacity),
+        hotel_name = values(hotel_name),
+        hotel_location = values(hotel_location)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update hotel
+        <set>
+            <if test="hotelMaxCapacity != null">
+                hotel_max_capacity = #{hotelMaxCapacity},
+            </if>
+            <if test="hotelRemainingCapacity != null">
+                hotel_remaining_capacity = #{hotelRemainingCapacity},
+            </if>
+            <if test="hotelName != null and hotelName != ''">
+                hotel_name = #{hotelName},
+            </if>
+            <if test="hotelLocation != null and hotelLocation != ''">
+                hotel_location = #{hotelLocation},
+            </if>
+        </set>
+        where hotel_id = #{hotelId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from hotel where hotel_id = #{hotelId}
+    </delete>
+
+    <select id="queryAllHotel" resultMap="BaseResultMap">
+        select
+            hotel_max_capacity,hotel_remaining_capacity,hotel_name,hotel_location
+        from travelmanagement.hotel
+    </select>
+
+    <select id="HqueryByLocation" resultMap="BaseResultMap">
+        select
+            hotel_max_capacity,hotel_remaining_capacity,hotel_name,hotel_location
+        from travelmanagement.hotel
+        where hotel_location like concat('%', #{hotelLocation} ,'%')
+    </select>
+</mapper>
+

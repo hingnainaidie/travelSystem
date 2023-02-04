@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqu.travelsystem.dao.ParkingDao">
+
+    <resultMap id="BaseResultMap" type="com.cqu.travelsystem.entity.Parking">
+        <!--@Table parking-->
+        <result property="parkingId" column="parking_id" jdbcType="INTEGER"/>
+        <result property="parkingLocation" column="parking_location" jdbcType="VARCHAR"/>
+        <result property="parkingMaxCapacity" column="parking_max_capacity" jdbcType="INTEGER"/>
+        <result property="parkingRemainingCapacity" column="parking_remaining_capacity" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          parking_id, parking_location, parking_max_capacity, parking_remaining_capacity
+        from parking
+        where parking_id = #{parkingId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          parking_id, parking_location, parking_max_capacity, parking_remaining_capacity
+        from parking
+        <where>
+            <if test="parkingId != null">
+                and parking_id = #{parkingId}
+            </if>
+            <if test="parkingLocation != null and parkingLocation != ''">
+                and parking_location = #{parkingLocation}
+            </if>
+            <if test="parkingMaxCapacity != null">
+                and parking_max_capacity = #{parkingMaxCapacity}
+            </if>
+            <if test="parkingRemainingCapacity != null">
+                and parking_remaining_capacity = #{parkingRemainingCapacity}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          parking_id, parking_location, parking_max_capacity, parking_remaining_capacity
+        from travelmanagement.parking
+    </select>
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from parking
+        <where>
+            <if test="parkingId != null">
+                and parking_id = #{parkingId}
+            </if>
+            <if test="parkingLocation != null and parkingLocation != ''">
+                and parking_location = #{parkingLocation}
+            </if>
+            <if test="parkingMaxCapacity != null">
+                and parking_max_capacity = #{parkingMaxCapacity}
+            </if>
+            <if test="parkingRemainingCapacity != null">
+                and parking_remaining_capacity = #{parkingRemainingCapacity}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="parkingId" useGeneratedKeys="true">
+        insert into parking(parking_location, parking_max_capacity, parking_remaining_capacity)
+        values (#{parkingLocation}, #{parkingMaxCapacity}, #{parkingRemainingCapacity})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="parkingId" useGeneratedKeys="true">
+        insert into parking(parking_location, parking_max_capacity, parking_remaining_capacity)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.parkingLocation}, #{entity.parkingMaxCapacity}, #{entity.parkingRemainingCapacity})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="parkingId" useGeneratedKeys="true">
+        insert into parking(parking_location, parking_max_capacity, parking_remaining_capacity)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.parkingLocation}, #{entity.parkingMaxCapacity}, #{entity.parkingRemainingCapacity})
+        </foreach>
+        on duplicate key update
+        parking_location = values(parking_location),
+        parking_max_capacity = values(parking_max_capacity),
+        parking_remaining_capacity = values(parking_remaining_capacity)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update parking
+        <set>
+            <if test="parkingLocation != null and parkingLocation != ''">
+                parking_location = #{parkingLocation},
+            </if>
+            <if test="parkingMaxCapacity != null">
+                parking_max_capacity = #{parkingMaxCapacity},
+            </if>
+            <if test="parkingRemainingCapacity != null">
+                parking_remaining_capacity = #{parkingRemainingCapacity},
+            </if>
+        </set>
+        where parking_id = #{parkingId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from parking where parking_id = #{parkingId}
+    </delete>
+
+    <select id="queryAllParking" resultMap="BaseResultMap">
+        select
+            parking_location,parking_max_capacity,parking_remaining_capacity
+        from travelmanagement.parking
+    </select>
+
+    <select id="queryByLocation" resultMap="BaseResultMap">
+        select
+            parking_location,parking_max_capacity,parking_remaining_capacity
+        from travelmanagement.parking
+        where parking_location like concat('%', #{parkingLocation} ,'%')
+    </select>
+</mapper>
+

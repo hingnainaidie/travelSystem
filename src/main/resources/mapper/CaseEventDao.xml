@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqu.travelsystem.dao.CaseEventDao">
+
+    <resultMap id="BaseResultMap" type="com.cqu.travelsystem.entity.CaseEvent">
+        <!--@Table case_event-->
+        <result property="caseId" column="case_id" jdbcType="INTEGER"/>
+        <result property="tuserId" column="Tuser_id" jdbcType="INTEGER"/>
+        <result property="suserId" column="Suser_id" jdbcType="INTEGER"/>
+        <result property="caseDescription" column="case_description" jdbcType="VARCHAR"/>
+        <result property="caseBegintime" column="case_begintime" jdbcType="TIMESTAMP"/>
+        <result property="caseMidtime" column="case_midtime" jdbcType="TIMESTAMP"/>
+        <result property="caseEndtime" column="case_endtime" jdbcType="TIMESTAMP"/>
+        <result property="caseStatus" column="case_status" jdbcType="INTEGER"/>
+        <result property="caseResults" column="case_results" jdbcType="VARCHAR"/>
+        <result property="casePlace" column="case_place" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BaseResultMap">
+        select
+          case_id, Tuser_id, Suser_id, case_description, case_begintime, case_midtime, case_endtime, case_status, case_results, case_place
+        from case_event
+        where case_id = #{caseId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BaseResultMap">
+        select
+          case_id, Tuser_id, Suser_id, case_description, case_begintime, case_midtime, case_endtime, case_status, case_results, case_place
+        from case_event
+        <where>
+            <if test="caseId != null">
+                and case_id = #{caseId}
+            </if>
+            <if test="tuserId != null">
+                and Tuser_id = #{tuserId}
+            </if>
+            <if test="suserId != null">
+                and Suser_id = #{suserId}
+            </if>
+            <if test="caseDescription != null and caseDescription != ''">
+                and case_description = #{caseDescription}
+            </if>
+            <if test="caseBegintime != null">
+                and case_begintime = #{caseBegintime}
+            </if>
+            <if test="caseMidtime != null">
+                and case_midtime = #{caseMidtime}
+            </if>
+            <if test="caseEndtime != null">
+                and case_endtime = #{caseEndtime}
+            </if>
+            <if test="caseStatus != null">
+                and case_status = #{caseStatus}
+            </if>
+            <if test="caseResults != null and caseResults != ''">
+                and case_results = #{caseResults}
+            </if>
+            <if test="casePlace != null and casePlace != ''">
+                and case_place = #{casePlace}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseResultMap">
+        select
+          case_id, Tuser_id, Suser_id, case_description, case_begintime, case_midtime, case_endtime, case_status, case_results, case_place
+        from travelmanagement.case_event
+    </select>
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from case_event
+        <where>
+            <if test="caseId != null">
+                and case_id = #{caseId}
+            </if>
+            <if test="tuserId != null">
+                and Tuser_id = #{tuserId}
+            </if>
+            <if test="suserId != null">
+                and Suser_id = #{suserId}
+            </if>
+            <if test="caseDescription != null and caseDescription != ''">
+                and case_description = #{caseDescription}
+            </if>
+            <if test="caseBegintime != null">
+                and case_begintime = #{caseBegintime}
+            </if>
+            <if test="caseMidtime != null">
+                and case_midtime = #{caseMidtime}
+            </if>
+            <if test="caseEndtime != null">
+                and case_endtime = #{caseEndtime}
+            </if>
+            <if test="caseStatus != null">
+                and case_status = #{caseStatus}
+            </if>
+            <if test="caseResults != null and caseResults != ''">
+                and case_results = #{caseResults}
+            </if>
+            <if test="casePlace != null and casePlace != ''">
+                and case_place = #{casePlace}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="caseId" useGeneratedKeys="true">
+        insert into case_event(Tuser_id, Suser_id, case_description, case_begintime, case_midtime, case_endtime, case_status, case_results, case_place)
+        values (#{tuserId}, #{suserId}, #{caseDescription}, #{caseBegintime}, #{caseMidtime}, #{caseEndtime}, #{caseStatus}, #{caseResults}, #{casePlace})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="caseId" useGeneratedKeys="true">
+        insert into case_event(Tuser_id, Suser_id, case_description, case_begintime, case_midtime, case_endtime, case_status, case_results, case_place)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.tuserId}, #{entity.suserId}, #{entity.caseDescription}, #{entity.caseBegintime}, #{entity.caseMidtime}, #{entity.caseEndtime}, #{entity.caseStatus}, #{entity.caseResults}, #{entity.casePlace})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="caseId" useGeneratedKeys="true">
+        insert into case_event(Tuser_id, Suser_id, case_description, case_begintime, case_midtime, case_endtime, case_status, case_results, case_place)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.tuserId}, #{entity.suserId}, #{entity.caseDescription}, #{entity.caseBegintime}, #{entity.caseMidtime}, #{entity.caseEndtime}, #{entity.caseStatus}, #{entity.caseResults}, #{entity.casePlace})
+        </foreach>
+        on duplicate key update
+        Tuser_id = values(Tuser_id),
+        Suser_id = values(Suser_id),
+        case_description = values(case_description),
+        case_begintime = values(case_begintime),
+        case_midtime = values(case_midtime),
+        case_endtime = values(case_endtime),
+        case_status = values(case_status),
+        case_results = values(case_results),
+        case_place = values(case_place)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update case_event
+        <set>
+            <if test="tuserId != null">
+                Tuser_id = #{tuserId},
+            </if>
+            <if test="suserId != null">
+                Suser_id = #{suserId},
+            </if>
+            <if test="caseDescription != null and caseDescription != ''">
+                case_description = #{caseDescription},
+            </if>
+            <if test="caseBegintime != null">
+                case_begintime = #{caseBegintime},
+            </if>
+            <if test="caseMidtime != null">
+                case_midtime = #{caseMidtime},
+            </if>
+            <if test="caseEndtime != null">
+                case_endtime = #{caseEndtime},
+            </if>
+            <if test="caseStatus != null">
+                case_status = #{caseStatus},
+            </if>
+            <if test="caseResults != null and caseResults != ''">
+                case_results = #{caseResults},
+            </if>
+            <if test="casePlace != null and casePlace != ''">
+                case_place = #{casePlace},
+            </if>
+        </set>
+        where case_id = #{caseId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from case_event where case_id = #{caseId}
+    </delete>
+    <select id="quaryAllCaseEvent" resultMap="BaseResultMap">
+        select case_id,case_description,case_status
+        from case_event
+        order by case_status asc;
+    </select>
+
+    <select id="queryCaseById" resultMap="BaseResultMap">
+        select * from case_event
+        where case_id = #{caseId}
+    </select>
+
+    <select id="quaryVisCaseEvent" resultMap="BaseResultMap">
+        select case_id,case_description,case_status
+        from case_event
+        where Tuser_id = #{tuserId}
+    </select>
+
+    <update id="updateCaseById">
+        update case_event
+        set case_status = #{caseStatus},case_results = #{caseResults},case_endtime = #{caseEndtime},Suser_id = #{suserId}
+        where case_id = #{caseId}
+    </update>
+
+    <insert id="insertCase">
+        insert into case_event(Tuser_id, case_description, case_begintime, case_status, case_place)
+        values
+            (#{tuserId}, #{caseDescription}, #{caseBegintime}, #{caseStatus}, #{casePlace})
+    </insert>
+</mapper>
+
